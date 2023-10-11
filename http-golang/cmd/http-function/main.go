@@ -1,6 +1,8 @@
 package main
 
 import (
+	"database/sql"
+	"net/http"
 	"os"
 
 	"log/slog"
@@ -8,17 +10,33 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var logger *slog.Logger
-
-func getLogger() *slog.Logger {
-	if logger == nil {
-		logger = slog.New(slog.NewTextHandler(os.Stdout, nil))
-	}
-	return logger
+type App struct {
+	db     *sql.DB
+	logger *slog.Logger
 }
 
-func postTick(c *gin.Context) {
-	getLogger().Info("This HTTP triggered function executed successfully.", slog.Int("status_code", 200), slog.String("status", "OK"))
+func NewApp() *App {
+	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
+	return &App{
+		db:     nil, // TODO: connect to db
+		logger: logger,
+	}
+}
+
+func (a *App) getHandler(c *gin.Context) {
+	msg := "This HTTP GET triggered function executed successfully."
+	a.logger.Info(msg, slog.Int("status_code", 200), slog.String("status", "OK"))
+	c.JSON(http.StatusOK, gin.H{
+		"message": msg,
+	})
+}
+
+func (a *App) postHandler(c *gin.Context) {
+	msg := "This HTTP POST triggered function executed successfully."
+	a.logger.Info(msg, slog.Int("status_code", 200), slog.String("status", "OK"))
+	c.JSON(http.StatusOK, gin.H{
+		"message": msg,
+	})
 }
 
 func getPort() string {
@@ -30,8 +48,11 @@ func getPort() string {
 }
 
 func main() {
+	app := NewApp()
+
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
-	r.POST("/TimerTrigger1", postTick)
+	r.POST("/api/hello", app.postHandler)
+	r.GET("/api/hello", app.getHandler)
 	r.Run(getPort())
 }

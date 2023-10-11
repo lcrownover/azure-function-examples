@@ -13,8 +13,9 @@
     "version": "[3.*, 4.0.0)"
   },
   "customHandler": {
+    "enableForwardingHttpRequest": true,
     "description": {
-      "defaultExecutablePath": "",
+      "defaultExecutablePath": "handler",
       "workingDirectory": "",
       "arguments": []
     }
