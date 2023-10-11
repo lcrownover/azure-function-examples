@@ -19,6 +19,7 @@ func getLogger() *slog.Logger {
 
 func postTick(c *gin.Context) {
 	getLogger().Info("This HTTP triggered function executed successfully.", slog.Int("status_code", 200), slog.String("status", "OK"))
+	// do work here
 }
 
 func getPort() string {
