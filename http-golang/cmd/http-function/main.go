@@ -52,6 +52,7 @@ func main() {
 
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
+	r.GET("/", func(c *gin.Context) { c.JSON(http.StatusOK, gin.H{"message": "success"}) })
 	r.POST("/api/hello", app.postHandler)
 	r.GET("/api/hello", app.getHandler)
 	r.Run(getPort())

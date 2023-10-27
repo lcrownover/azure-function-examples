@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"log/slog"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -34,5 +35,8 @@ func main() {
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
 	r.POST("/TimerFunction", postTick)
+	r.GET("/", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"message": "success"})
+	})
 	r.Run(getPort())
 }
